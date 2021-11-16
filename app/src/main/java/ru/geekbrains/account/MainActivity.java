@@ -10,6 +10,8 @@ import androidx.appcompat.app.AppCompatActivity;
 
 public class MainActivity extends AppCompatActivity implements Constants {
 
+    private static final int REQUEST_CODE_SETTING_ACTIVITY = 99;
+
     private Button bthGreeting;
     private EditText txtName;
     private TextView txtHello;
@@ -39,8 +41,23 @@ public class MainActivity extends AppCompatActivity implements Constants {
             populateAccount();
             Intent runSettings = new Intent(MainActivity.this, SettingsActivity.class);
             runSettings.putExtra(YOUR_ACCOUNT, account);
-            startActivity(runSettings);
+            startActivityForResult(runSettings, REQUEST_CODE_SETTING_ACTIVITY);
         });
+    }
+
+    protected void onActivityResult(int requestCode, int resultCode, Intent data){
+        if (requestCode != REQUEST_CODE_SETTING_ACTIVITY){
+            super.onActivityResult(requestCode, resultCode, data);
+        }
+
+        if (resultCode == RESULT_OK) {
+            account = data.getParcelableExtra(YOUR_ACCOUNT);
+            populateViews();
+        }
+    }
+
+    private void populateViews() {
+        txtName.setText(account.getName());
     }
 
     private void populateAccount(){
