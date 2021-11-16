@@ -14,10 +14,13 @@ public class MainActivity extends AppCompatActivity implements Constants {
     private EditText txtName;
     private TextView txtHello;
 
+    private Account account;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        account = new Account();
         initViews();
     }
 
@@ -33,9 +36,14 @@ public class MainActivity extends AppCompatActivity implements Constants {
 
         Button btnSettings = findViewById(R.id.btnSettings);
         btnSettings.setOnClickListener(view -> {
+            populateAccount();
             Intent runSettings = new Intent(MainActivity.this, SettingsActivity.class);
-            runSettings.putExtra(YOUR_NAME, txtName.getText().toString());
+            runSettings.putExtra(YOUR_ACCOUNT, account);
             startActivity(runSettings);
         });
+    }
+
+    private void populateAccount(){
+        account.setName(txtName.getText().toString());
     }
 }
