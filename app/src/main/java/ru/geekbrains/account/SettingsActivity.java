@@ -1,5 +1,6 @@
 package ru.geekbrains.account;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.EditText;
@@ -27,8 +28,19 @@ public class SettingsActivity extends AppCompatActivity implements Constants {
 
         Button btnReturn = findViewById(R.id.btnReturn);
         btnReturn.setOnClickListener(view -> {
+            Intent intentResult = new Intent();
+            intentResult.putExtra(YOUR_ACCOUNT, createAccount());
+            setResult(RESULT_OK, intentResult);
             finish();
         });
+    }
+
+    private Account createAccount() {
+        return new Account(
+                editName.getText().toString(),
+                editSurname.getText().toString(),
+                Integer.parseInt(editAge.getText().toString()),
+                editEmail.getText().toString());
     }
 
     private void populateView(Account account) {
