@@ -1,13 +1,18 @@
 package ru.geekbrains.account;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
-import android.widget.*;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TextView;
 
-public class MainActivity extends AppCompatActivity {
+import androidx.appcompat.app.AppCompatActivity;
+
+public class MainActivity extends AppCompatActivity implements Constants {
+
+    private Button bthGreeting;
+    private EditText txtName;
+    private TextView txtHello;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -17,9 +22,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initViews() {
-        Button bthGreeting = findViewById(R.id.btnGreetings);
-        EditText txtName = findViewById(R.id.textName);
-        TextView txtHello = findViewById(R.id.textHello);
+        bthGreeting = findViewById(R.id.btnGreetings);
+        txtName = findViewById(R.id.textName);
+        txtHello = findViewById(R.id.textHello);
         bthGreeting.setOnClickListener(view -> {
             String name = txtName.getText().toString();
             String sayHello = getString(R.string.say_hello) + name;
@@ -29,6 +34,7 @@ public class MainActivity extends AppCompatActivity {
         Button btnSettings = findViewById(R.id.btnSettings);
         btnSettings.setOnClickListener(view -> {
             Intent runSettings = new Intent(MainActivity.this, SettingsActivity.class);
+            runSettings.putExtra(YOUR_NAME, txtName.getText().toString());
             startActivity(runSettings);
         });
     }
