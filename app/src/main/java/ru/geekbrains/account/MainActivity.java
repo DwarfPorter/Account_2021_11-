@@ -6,6 +6,10 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 
 public class MainActivity extends AppCompatActivity implements Constants {
@@ -39,21 +43,33 @@ public class MainActivity extends AppCompatActivity implements Constants {
         Button btnSettings = findViewById(R.id.btnSettings);
         btnSettings.setOnClickListener(view -> {
             populateAccount();
-            Intent runSettings = new Intent(MainActivity.this, SettingsActivity.class);
-            runSettings.putExtra(YOUR_ACCOUNT, account);
-            startActivityForResult(runSettings, REQUEST_CODE_SETTING_ACTIVITY);
+            openSettingsActivityForResult();
         });
     }
 
-    protected void onActivityResult(int requestCode, int resultCode, Intent data){
-        if (requestCode != REQUEST_CODE_SETTING_ACTIVITY){
-            super.onActivityResult(requestCode, resultCode, data);
-        }
+    private void openSettingsActivityForResult(){
+        Intent runSettings = new Intent(MainActivity.this, SettingsActivity.class);
+        runSettings.putExtra(YOUR_ACCOUNT, account);
+        someActivityResultLauncher.launch(runSettings);
+    }
 
-        if (resultCode == RESULT_OK) {
-            account = data.getParcelableExtra(YOUR_ACCOUNT);
-            populateViews();
-        }
+    // You can do the assignment inside onAttach or onCreate, i.e, before the activity is displayed
+    ActivityResultLauncher<Intent> someActivityResultLauncher = registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(),
+            new ActivityResultCallback<ActivityResult>() {
+                @Override
+                public void onActivityResult(ActivityResult result) {
+                    if (result.getResultCode() == RESULT_OK) {
+                        // There are no request codes
+                        Intent data = result.getData();
+                        setSettingsResult(data);
+                    }
+                }
+            });
+
+    private void setSettingsResult(Intent data) {
+        account = data.getParcelableExtra(YOUR_ACCOUNT);
+        populateViews();
     }
 
     private void populateViews() {
