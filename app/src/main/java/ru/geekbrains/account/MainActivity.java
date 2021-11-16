@@ -2,6 +2,7 @@ package ru.geekbrains.account;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.*;
@@ -23,6 +24,12 @@ public class MainActivity extends AppCompatActivity {
             String name = txtName.getText().toString();
             String sayHello = getString(R.string.say_hello) + name;
             txtHello.setText(sayHello);
+        });
+
+        Button btnSettings = findViewById(R.id.btnSettings);
+        btnSettings.setOnClickListener(view -> {
+            Intent runSettings = new Intent(MainActivity.this, SettingsActivity.class);
+            startActivity(runSettings);
         });
     }
 }
